@@ -1,0 +1,22 @@
+<script type="text/javascript">
+$( document ).ready(function() {
+	$("#enkeleFieldset").hide();
+	$("#dubbelleFieldset").hide();
+
+	$( "select[name='offerte[customer]']" ).change(function() {
+		$.post( "<?php echo $this->url("zfcadmin/customer/customerMeter"); ?>/" + $(this).val(), function( data ) {
+			$("#enkeleFieldset").hide();
+			$("#dubbelleFieldset").hide();
+
+			if (data.meter == "Enkele") {
+				$("#enkeleFieldset").show();
+			} else if (data.meter == "Dubbelle") {
+				$("#dubbelleFieldset").show();
+			}
+		});
+	});
+});
+</script>
+
+<?php
+echo $this->partial('admin/createForm');

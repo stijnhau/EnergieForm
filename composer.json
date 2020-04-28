@@ -1,0 +1,26 @@
+{
+	"name" : "zendframework/skeleton-application",
+	"description" : "Skeleton Application for ZF2",
+	"require" : {
+		"php" : ">=5.5",
+		"doctrine/common" : ">=v2.4.2",
+		"doctrine/orm" : ">=v2.4.4",
+		"doctrine/doctrine-orm-module" : ">=0.8.0",
+		"zendframework/zendframework" : "dev-master@dev",
+		"zf-commons/zfc-user" : "dev-user_id-to-id as 1.6.0",
+		"danielss89/zfc-user-admin" : "=dev-master@dev",
+		"bjyoungblood/bjy-authorize" : "=1.5.x-dev",
+		"tecnickcom/tcpdf" : ">=6.2.12@stable"
+	},
+	"repositories" : [{
+			"type" : "vcs",
+			"url" : "https://github.com/stijnhau/ZfcUser"
+		}
+	],
+	"license" : "BSD-3-Clause",
+	"keywords" : [
+		"framework",
+		"zf2"
+	],
+	"homepage" : "http://framework.zend.com/"
+}

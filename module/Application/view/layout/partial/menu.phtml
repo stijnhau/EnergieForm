@@ -1,0 +1,76 @@
+<?php
+/**
+ * CAR-51 - Make menu collapsable
+ * @since   2015-09-22
+ * @author  Stijn
+ */
+
+$i = 1;
+foreach ($this->container as $page):
+    /** @var \Zend\Navigation\Page\Mvc $page */
+    $pageClone = clone $page;
+    $page->setAction($this->getHelperPluginManager()->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch()->getParam('action'));
+
+    $name = $this->ReadNumber()->readNumber($i);
+    $name = ucfirst($name);
+    ?>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <?php
+            if ($page->hasPages()) {
+            ?>
+            <a id='url<?php echo $name; ?>' href="#collapse<?php echo $name; ?>" data-parent="#side_accordion" data-toggle="collapse" class="accordion-toggle">
+                <i class="glyphicon glyphicon-folder-close"></i> <?php echo $pageClone->getLabel() ?>
+            </a>
+            <?php
+            } else {
+            ?>
+            <a href="<?php echo $pageClone->getHref() ?>" target="<?php echo $pageClone->getTarget(); ?>">
+                <div <?php if ($page->isActive(true)) echo ' style="background: #48A6D2 none repeat scroll 0% 0% !important; color: white; padding 5px;"' ?>">
+                	<?php echo $page->getLabel() ?>
+                </div>
+            </a>
+            <?php
+            }
+            ?>
+        </div>
+        <?php if ($page->hasPages()) {
+            $pages = $page->getPages();
+        ?>
+        <div class="accordion-body collapse" id="collapse<?php echo $name; ?>">
+            <div class="panel-body">
+                <ul class="nav nav-pills nav-stacked">
+                    <?php
+                    foreach ($pages as $subPage):
+                        $ubPageClone = clone $subPage;
+                        $subPage->setAction($this->getHelperPluginManager()->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch()->getParam('action'));
+
+                        echo '<li';
+                        if ($subPage->isActive(true)) {
+                            echo ' class="active"';
+                        }
+                        echo '><a href="' . $ubPageClone->getHref() . '" target="' . $ubPageClone->getTarget() . '">' .
+                           $this->translate($ubPageClone->getLabel()) .
+                           '</a></li>';
+                    endforeach;
+                    ?>
+                </ul>
+            </div>
+        </div>
+        <?php } ?>
+    </div>
+
+    <?php
+    if ($page->hasPages() && $page->isActive(true) === true) {
+        ?>
+        <script>
+        $( document ).ready(function() {
+      	  $("#url<?php echo $name; ?>").click();
+      	});
+        </script>
+        <?php
+    }
+    ?>
+<?php
+$i++;
+endforeach; ?>

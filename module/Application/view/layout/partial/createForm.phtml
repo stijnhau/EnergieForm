@@ -1,0 +1,68 @@
+<script type="text/javascript">
+$( document ).ready(function() {
+	$(".datetimepicker").css("background-color", "white");
+	$(".datetimepicker").prop("readonly", true);
+    $(".datetimepicker").datetimepicker({format: 'YYYY-MM-DD HH:mm', ignoreReadonly: true});
+
+    $("#buttonCancel").click(function() {
+        window.history.back();
+    });
+
+    $("#buttonReset").click(function() {
+        window.location.reload(true);
+    });
+});
+</script>
+
+
+<?php
+if (isset($this->customText) && is_array($this->customText)) {
+    foreach ($this->customText as $text) {
+        echo $text;
+    }
+}
+
+$form = $this->form;
+$form->setAttribute('class', 'form-horizontal well');
+$form->prepare();
+
+echo $this->form()->openTag($form);
+foreach ($form as $element):
+    if ($element instanceof Zend\Form\Fieldset):
+        echo "<fieldset id='" . $element->getName() . "Fieldset'>";
+        foreach ($element as $fieldsetElement):
+            $extraClass = "";
+            if ($this->formElementErrors($fieldsetElement) !== "") {
+                $extraClass = "f_error";
+            }
+            ?>
+            <div class="form-group <?php echo $extraClass; ?>">
+            <?php
+            if (!(($fieldsetElement instanceof Zend\Form\Element\Button) || ($fieldsetElement instanceof Zend\Form\Element\Hidden)|| ($fieldsetElement instanceof Zend\Form\Element\Csrf))): ?>
+                <?php
+                echo $this->formLabel($fieldsetElement);
+            endif;
+
+            echo "<div class='col-lg-10'>";
+//                 if ($fieldsetElement instanceof Zend\Form\Element\DateTime):
+//                     $fieldsetElement->setAttribute('class', "datetimepicker");
+//                     echo "<div style='position:relative'>" . $this->forminput($fieldsetElement) . "</div>";
+//                 elseif ($fieldsetElement instanceof Application\Form\Element\Datalist):
+//                     echo $this->form_datalist($fieldsetElement);
+//                 else:
+                    echo $this->formelement($fieldsetElement);
+//                endif;
+                ?>
+                <label class="error"><?php echo $this->formElementErrors($fieldsetElement); ?></label>
+                </div>
+            </div>
+            <?php
+        endforeach;
+        echo "</fieldset>";
+    else:
+        if ($element instanceof Zend\Form\Element\Button):
+            echo $this->formButton($element);
+        endif;
+    endif;
+endforeach;
+echo $this->form()->closeTag();

@@ -1,0 +1,14 @@
+<?php
+if ((isset($this->createButton) && $this->createButton === true) or !isset($this->createButton)) {
+?>
+    <div class="navbar filter-bar">
+        <div class="navbar-inner">
+            <div class="pull-right">
+                <a href="<?php echo $this->url($this->url . "/create") ?>" class="btn btn-primary">
+                    <?php echo $this->translate('Add New') ?>
+                </a>
+            </div>
+        </div>
+    </div>
+<?php
+}

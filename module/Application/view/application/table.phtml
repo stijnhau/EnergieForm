@@ -1,0 +1,94 @@
+<h3 class="heading"><?php echo $this->translate($this->title) ?></h3>
+
+<?php
+if (isset($this->remove)) {
+?>
+<div class="row-fluid">
+    <div class="span12">
+<?php
+    if ($this->remove === true) {
+?>
+        <div class="alert alert-success">
+            <a class="close" data-dismiss="alert">×</a>
+            <strong><?php echo $this->translate("Succes"); ?></strong> <?php echo $this->translate("The removal has succeed"); ?>
+        </div>
+
+<?php
+    } else {
+?>
+        <div class="alert alert-error">
+            <a class="close" data-dismiss="alert">×</a>
+            <strong><?php echo $this->translate("Failed") ?></strong> <?php echo $this->translate("The removal has failed"); ?>
+        </div>
+<?php
+    }
+?>
+    </div>
+</div>
+<?php
+}
+
+echo $this->partial(
+    'admin/createButtonPartial',
+    array(
+        'url'           => $this->url,
+        'createButton'  => $this->createButton,
+    )
+);
+?>
+
+<table class="table table-condensed table-bordered dataTable">
+    <thead>
+        <tr>
+            <?php foreach ($this->listElements as $name => $element): ?>
+                <th><?php echo $this->translate($this->escapeHtml($name ? : $element)); ?></th>
+            <?php endforeach; ?>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    <?php foreach ($this->items as $item): ?>
+        <tr>
+            <?php foreach ($this->listElements as $element): ?>
+                <td>
+                    <?php $parts = explode("->", $element);
+                    $data = $item;
+                    foreach ($parts as $part):
+                       $data = call_user_func(array($data, $part));
+                    endforeach;
+
+                    if ($data instanceof DateTime) {
+                        echo $data->format("Y-m-d H:i");
+                    } elseif ($data instanceof Date) {
+                        echo $data->format("Y-m-d");
+                    } else {
+                        echo $data;
+                    }
+                    ?>
+                </td>
+            <?php endforeach; ?>
+            <td>
+                <?php
+                if ($this->showInfo !== false) {
+                ?>
+                <a title="<?php echo $this->translate('Info') ?>" href="<?php echo $this->url($this->url . "/info", array('id' => $item->getId())); ?>">
+                    <img style="width: 24px; height:24px;" src='<?php echo $this->basepath(); ?>/img/gCons/info31.png' alt="<?php echo $this->translate('Info') ?>" />
+                </a>
+                |
+                <?php
+                }
+                ?>
+                <a title="<?php echo $this->translate('Edit') ?>" href="<?php echo $this->url($this->url . "/create", array('id' => $item->getId())); ?>">
+                    <img style="width: 24px; height:24px;" src='<?php echo $this->basepath(); ?>/img/gCons/edit.png' alt="<?php echo $this->translate('Edit') ?>" />
+                </a>
+                |
+                <a title="<?php echo $this->translate('Remove') ?>" href="<?php echo $this->url($this->url . "/remove", array('id' => $item->getId())); ?>"
+                   onclick="return confirm('<?php echo $this->translate('Really delete?') ?>')">
+                    <img style="width: 24px; height:24px;" src='<?php echo $this->basepath(); ?>/img/gCons/delete-item.png' alt="<?php echo $this->translate('Remove') ?>" />
+                </a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>

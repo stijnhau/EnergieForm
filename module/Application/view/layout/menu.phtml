@@ -1,0 +1,33 @@
+<ul class="nav nav-pills nav-stacked" >
+	<?php foreach ($this->container as $page): ?>
+		<?php
+		$class = "";
+		if ($page->isActive(true)) {
+		    $class .= " active";
+		}
+
+		if (count($page) > 0) {
+		    $class .= " parent";
+		}
+		?>
+
+		<li class="<?= $class . " " . count($page) ?>">
+			<?php
+			if (count($page) > 0) {
+			    echo $this->navigation()->menu()->htmlify($page) . PHP_EOL;
+			    echo '<ul class="children">';
+			    foreach ($page as $subpage):
+    			    $class = "";
+    			    if ($subpage->isActive(true)) {
+    			        $class .= " active";
+    			    }
+			        echo "<li class='" . $class . "'>" . $this->navigation()->menu()->htmlify($subpage) . "</li>" . PHP_EOL;
+			    endforeach;
+			    echo '</ul>';
+			} else {
+			    echo $this->navigation()->menu()->htmlify($page) . PHP_EOL;
+			}
+			?>
+		</li>
+    <?php endforeach; ?>
+ </ul>
